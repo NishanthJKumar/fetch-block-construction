@@ -25,7 +25,7 @@ base = '''<?xml version="1.0" encoding="utf-8"?>
         <include file="robot.xml"></include>
         
         <body pos="1.3 0.75 0.2" name="table0">
-            <geom size="0.25 0.35 0.2" type="box" mass="2000" material="table_mat"></geom>
+            <geom name="table0" size="0.25 0.35 0.2" type="box" mass="2000" material="table_mat"></geom>
         </body>
         
         {object_bodies}

@@ -53,3 +53,9 @@ while True:
         print(step)
 
 # Getting some x-position: env.sim.data.get_site_xpos('object0')
+# Get contacts:
+# for i in range(env.sim.data.ncon):
+#     contact = env.sim.data.contact[i]
+#     print('contact', i)
+#     print('geom1', contact.geom1, env.sim.model.geom_id2name(contact.geom1))
+#     print('geom2', contact.geom2, env.sim.model.geom_id2name(contact.geom2))
