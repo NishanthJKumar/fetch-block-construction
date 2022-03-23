@@ -5,6 +5,7 @@ from gym.wrappers.monitor import Monitor
 import fetch_block_construction
 from gym.wrappers.monitoring import video_recorder
 
+NUM_BLOCKS = 2
 env = gym.make('FetchBlockConstruction_2Blocks_SparseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1')
 # env = Monitor(env, directory="videos", force=True, video_callable=lambda x: x)
 # vid = video_recorder.VideoRecorder(env,path="./videos/vid.mp4")
@@ -41,7 +42,6 @@ def in_contact(env, obj1_name, obj2_name):
             return True
     return False
 
-
 def ontable_contact(env, obj_name):
     """Test this predicate by simply checking whether the object in question is touching the table."""
     return in_contact(env, obj_name, "table0")
@@ -56,9 +56,20 @@ def on(env, obj1_name, obj2_name):
         return False
     return in_contact(obj1_name, obj2_name)
 
+def clear(env, obj_name):
+    """Test whether obj_name has nothing on it."""
+    for i in range(NUM_BLOCKS):
+        curr_block_name = f"object{i}"
+        if curr_block_name == obj_name:
+            continue
+        else:
+            if on(env, curr_block_name, obj_name):
+                return False
+    return True
+
+
 # TODO: Holding
-# TODO: Clear
-# TODO: Other remaining predicates
+# TODO: Hand-Empty
 
 
 step=0
