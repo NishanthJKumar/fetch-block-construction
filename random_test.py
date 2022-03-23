@@ -67,6 +67,21 @@ def clear(env, obj_name):
                 return False
     return True
 
+def r_gripper_contact(env, obj_name):
+    return in_contact(env, obj_name, 'robot0:r_gripper_finger_link')
+
+def l_gripper_contact(env, obj_name):
+    return in_contact(env, obj_name, 'robot0:l_gripper_finger_link')
+
+def holding(env, obj_name):
+    return r_gripper_contact(env, obj_name) and l_gripper_contact(env, obj_name)
+
+def hand_empty(env):
+    for i in range(NUM_BLOCKS):
+        curr_block_name = f"object{i}"
+        if holding(env, curr_block_name):
+            return False 
+    return True
 
 # TODO: Holding
 # TODO: Hand-Empty
