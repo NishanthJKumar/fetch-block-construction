@@ -83,9 +83,6 @@ def hand_empty(env):
             return False 
     return True
 
-# TODO: Holding
-# TODO: Hand-Empty
-
 
 step=0
 while True:
