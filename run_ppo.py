@@ -2,6 +2,7 @@ import gym
 gym.logger.set_level(gym.logger.DEBUG)
 import numpy as np
 import fetch_block_construction  # NOTE: Necessary import for env to be created even though not directly used!
+import torch
 import torch.nn as nn
 from easyrl.agents.ppo_agent import PPOAgent
 from easyrl.configs import cfg
@@ -109,13 +110,16 @@ def main():
         cfg.alg.restore_cfg(skip_params=skip_params)
     if cfg.alg.env_name is None:
         cfg.alg.env_name = 'FetchBlockConstruction_2Blocks_SparseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1'
-
+    if torch.cuda.is_available():
+        cfg.alg.device = 'cuda'
+    else:
+        cfg.alg.device = 'cpu'
     set_random_seed(cfg.alg.seed)
     env = make_vec_env(cfg.alg.env_name,
                        cfg.alg.num_envs,
                        seed=cfg.alg.seed)
     env.reset()
-    ob_size = env.observation_space.shape[0]
+    ob_size = env.observation_space['observation'].shape[0]
 
     actor_body = MLP(input_size=ob_size,
                      hidden_sizes=[64],
@@ -144,6 +148,7 @@ def main():
         raise TypeError(f'Unknown action space type: {env.action_space}')
 
     critic = ValueNet(critic_body, in_features=64)
+    
     agent = PPOAgent(actor=actor, critic=critic, env=env)
     runner = EpisodicRunner(agent=agent, env=env)
     engine = PPOEngine(agent=agent,
