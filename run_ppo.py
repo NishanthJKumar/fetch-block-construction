@@ -3,7 +3,10 @@ gym.logger.set_level(gym.logger.DEBUG)
 import numpy as np
 import fetch_block_construction  # NOTE: Necessary import for env to be created even though not directly used!
 import torch
+import os
 import torch.nn as nn
+from pathlib import Path
+
 from easyrl.agents.ppo_agent import PPOAgent
 from easyrl.configs import cfg
 from easyrl.configs import set_config
@@ -98,6 +101,8 @@ def hand_empty(env):
 def main():
     set_config('ppo')
     cfg_from_cmd(cfg.alg)
+    if cfg.alg.env_name is None:
+        cfg.alg.env_name = 'FetchBlockConstruction_2Blocks_SparseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1'
     if cfg.alg.resume or cfg.alg.test:
         if cfg.alg.test:
             skip_params = [
@@ -107,17 +112,18 @@ def main():
             ]
         else:
             skip_params = []
-        cfg.alg.restore_cfg(skip_params=skip_params)
-    if cfg.alg.env_name is None:
-        cfg.alg.env_name = 'FetchBlockConstruction_2Blocks_SparseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1'
+        cfg.alg.restore_cfg(skip_params=skip_params)#,path=Path(os.path.join(os.getcwd(),'data', cfg.alg.env_name)))
+
     if torch.cuda.is_available():
         cfg.alg.device = 'cuda'
     else:
         cfg.alg.device = 'cpu'
     set_random_seed(cfg.alg.seed)
+    if cfg.alg.test:
+        cfg.alg.num_envs = 1
     env = make_vec_env(cfg.alg.env_name,
-                       cfg.alg.num_envs,
-                       seed=cfg.alg.seed)
+                    cfg.alg.num_envs,
+                    seed=cfg.alg.seed)
     env.reset()
     ob_size = env.observation_space['observation'].shape[0]
 
@@ -167,3 +173,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# NOTE:
+# To train, run: `python run_ppo.py`` from the root of this repository
+# To eval, run: `python run_ppo.py --render --test` from the root of this repository
