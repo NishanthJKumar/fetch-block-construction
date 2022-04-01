@@ -86,7 +86,6 @@ class FetchBlockConstructionEnv(fetch_env.FetchEnv, gym_utils.EzPickle):
             # Dense incremental
             stacked_reward = -np.sum([(d > self.distance_threshold).astype(np.float32) for d in subgoal_distances], axis=0)
             stacked_reward = np.asarray(stacked_reward)
-
             reward = stacked_reward.copy()
             np.putmask(reward, reward == 0, self.gripper_pos_far_from_goals(achieved_goal, goal))
 

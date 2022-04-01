@@ -102,7 +102,8 @@ def main():
     set_config('ppo')
     cfg_from_cmd(cfg.alg)
     if cfg.alg.env_name is None:
-        cfg.alg.env_name = 'FetchBlockConstruction_2Blocks_SparseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1'
+        # cfg.alg.env_name = 'FetchBlockConstruction_2Blocks_SparseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1'
+        cfg.alg.env_name = 'FetchBlockConstruction_2Blocks_DenseReward_DictstateObs_42Rendersize_FalseStackonly_SingletowerCase-v1'
     if cfg.alg.resume or cfg.alg.test:
         if cfg.alg.test:
             skip_params = [
@@ -177,3 +178,4 @@ if __name__ == '__main__':
 # NOTE:
 # To train, run: `python run_ppo.py`` from the root of this repository
 # To eval, run: `python run_ppo.py --render --test` from the root of this repository
+# Also, the reward function is coming from `compute_reward()` in construction.py
