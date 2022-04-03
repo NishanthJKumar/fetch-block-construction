@@ -1,15 +1,19 @@
 (define (domain blocksworld)
     (:requirements :strips :equality)
+    (:types 
+        obj ; objects
+    )
     (:predicates 
-        (clear ?x)
-        (on_table ?x)
+        (clear ?x - obj)
+        (on_table ?x - obj)
         (hand_empty)
-        (holding ?x)
-        (on ?x ?y)
+        (holding ?x - obj)
+        (on ?x ?y - obj)
     )
 
+
     (:action pickup
-        :parameters (?ob)
+        :parameters (?ob - obj)
         :precondition (and 
             (clear ?ob) 
             (on_table ?ob) 
@@ -24,7 +28,7 @@
     )
 
     (:action putdown
-        :parameters (?ob)
+        :parameters (?ob - obj)
         :precondition (and 
             (holding ?ob)
         )
@@ -37,7 +41,7 @@
     )
 
     (:action stack
-        :parameters (?ob ?underob)
+        :parameters (?ob - obj ?underob - obj)
         :precondition (and 
             (clear ?underob) 
             (holding ?ob)
@@ -52,7 +56,7 @@
     )
 
     (:action unstack
-        :parameters (?ob ?underob)
+        :parameters (?ob - obj ?underob - obj)
         :precondition (and 
             (on ?ob ?underob) 
             (clear ?ob) 

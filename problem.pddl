@@ -1,6 +1,6 @@
 (define (problem task)
 	(:domain blocksworld)
-	(:objects object0 object1)
+	(:objects object0 object1 - obj)
 	(:init
 		(hand_empty)
 		(on_table object0)
